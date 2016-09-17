@@ -29,6 +29,9 @@ class ErrorInfo:
     # The line number related to this error within file.
     line = 0     # -1 if unknown
 
+    # The column number related to this error with file.
+    column = 0   # -1 if unknown
+
     # Either 'error' or 'note'.
     severity = ''
 
@@ -42,13 +45,14 @@ class ErrorInfo:
     only_once = False
 
     def __init__(self, import_ctx: List[Tuple[str, int]], file: str, typ: str,
-                 function_or_member: str, line: int, severity: str, message: str,
-                 blocker: bool, only_once: bool) -> None:
+                 function_or_member: str, line: int, column: int, severity: str,
+                 message: str, blocker: bool, only_once: bool) -> None:
         self.import_ctx = import_ctx
         self.file = file
         self.type = typ
         self.function_or_member = function_or_member
         self.line = line
+        self.column = column
         self.severity = severity
         self.message = message
         self.blocker = blocker
@@ -169,7 +173,7 @@ class Errors:
         """Replace the entire import context with a new value."""
         self.import_ctx = ctx[:]
 
-    def report(self, line: int, message: str, blocker: bool = False,
+    def report(self, line: int, column: int, message: str, blocker: bool = False,
                severity: str = 'error', file: str = None, only_once: bool = False) -> None:
         """Report message at the given line using the current error context.
 
@@ -187,7 +191,7 @@ class Errors:
         if file is None:
             file = self.file
         info = ErrorInfo(self.import_context(), file, type,
-                         self.function_or_member[-1], line, severity, message,
+                         self.function_or_member[-1], line, column, severity, message,
                          blocker, only_once)
         self.add_error_info(info)
 
@@ -210,7 +214,7 @@ class Errors:
                 for line in ignored_lines - self.used_ignored_lines[file]:
                     # Don't use report since add_error_info will ignore the error!
                     info = ErrorInfo(self.import_context(), file, None, None,
-                                    line, 'note', "unused 'type: ignore' comment",
+                                    line, -1, 'note', "unused 'type: ignore' comment",
                                     False, False)
                     self.error_info.append(info)
 

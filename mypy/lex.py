@@ -27,6 +27,7 @@ class Token:
         self.string = string
         self.pre = pre
         self.line = 0
+        self.column = 0
 
     def __repr__(self) -> str:
         """The representation is of form 'Keyword(  if)'."""
