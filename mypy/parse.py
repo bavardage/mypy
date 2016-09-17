@@ -4,9 +4,6 @@ Constructs a parse tree (abstract syntax tree) based on a string
 representing a source file. Performs only minimal semantic checks.
 """
 
-# TODO HONK
-# go through set_line and see where we can also set_column
-
 import re
 
 from typing import List, Tuple, Any, Set, cast, Union, Optional
@@ -502,6 +499,7 @@ class Parser:
 
             node = FuncDef(name, args, body, typ)
             node.set_line(def_tok)
+            node.set_column(def_tok)
             if typ is not None:
                 typ.definition = node
             return node
@@ -893,6 +891,7 @@ class Parser:
                 self.skip()
             node = Block(stmt_list)
             node.set_line(colon)
+            node.set_column(colon)
             return node, type
 
     def try_combine_overloads(self, s: Node, stmt: List[Node]) -> bool:
@@ -971,6 +970,7 @@ class Parser:
             raise ParseError()
         if stmt is not None:
             stmt.set_line(t)
+            stmt.set_column(t)
         return stmt, is_simple
 
     def parse_expression_or_assignment(self) -> Node:
@@ -1158,6 +1158,7 @@ class Parser:
         else:
             index = TupleExpr(index_items)
             index.set_line(index_items[0].get_line())
+            index.set_column(index_items[0].get_column())
 
         return index
 
@@ -1205,7 +1206,7 @@ class Parser:
             if not isinstance(self.current(), Colon):
                 try:
                     t = self.current()
-                    types.append(self.parse_expression(precedence[',']).set_line(t))
+                    types.append(self.parse_expression(precedence[',']).set_line(t).set_column(t))
                     if self.current_str() == 'as':
                         self.expect('as')
                         vars.append(self.parse_name_expr())
@@ -1351,6 +1352,7 @@ class Parser:
         # deal with it separately.
         if expr.line < 0:
             expr.set_line(current)
+            expr.set_column(current)
 
         # Parse operations that require a left argument (stored in expr).
         while True:
@@ -1415,6 +1417,7 @@ class Parser:
             # needs to deal with it separately.
             if expr.line < 0:
                 expr.set_line(current)
+                expr.set_column(current)
 
         return expr
 
@@ -1435,6 +1438,7 @@ class Parser:
         expr = StarExpr(expr)
         if expr.line < 0:
             expr.set_line(star)
+            expr.set_column(star)
         return expr
 
     def parse_empty_tuple_expr(self) -> TupleExpr:
@@ -1466,6 +1470,7 @@ class Parser:
 
         gen = GeneratorExpr(left_expr, indices, sequences, condlists)
         gen.set_line(tok)
+        gen.set_column(tok)
         return gen
 
     def parse_comp_for(self) -> Tuple[List[Node], List[Node], List[List[Node]]]:
@@ -1497,7 +1502,7 @@ class Parser:
             return expr
         else:
             t = self.current()
-            return self.parse_tuple_expr(expr, prec).set_line(t)
+            return self.parse_tuple_expr(expr, prec).set_line(t).set_column(t)
 
     def parse_conditional_expr(self, left_expr: Node) -> ConditionalExpr:
         self.expect('if')
@@ -1551,6 +1556,7 @@ class Parser:
         indices, sequences, condlists = self.parse_comp_for()
         dic = DictionaryComprehension(key, value, indices, sequences, condlists)
         dic.set_line(colon)
+        dic.set_column(colon)
         self.expect('}')
         return dic
 
@@ -1577,6 +1583,7 @@ class Parser:
         tok = self.expect_type(Name)
         node = NameExpr(tok.string)
         node.set_line(tok)
+        node.set_column(tok)
         return node
 
     octal_int = re.compile('0+[1-9]')
@@ -1723,6 +1730,7 @@ class Parser:
                 items.append(self.parse_slice_item())
             index = TupleExpr(items)
             index.set_line(items[0].line)
+            index.set_column(items[0].column)
         self.expect(']')
         node = IndexExpr(base, index)
         return node
@@ -1734,6 +1742,7 @@ class Parser:
                 ellipsis = EllipsisExpr()
                 token = self.skip()
                 ellipsis.set_line(token)
+                ellipsis.set_column(token)
                 return ellipsis
             else:
                 item = self.parse_expression(precedence[','])
@@ -1752,7 +1761,7 @@ class Parser:
                 self.expect(':')
                 if self.current_str() not in (']', ','):
                     stride = self.parse_expression(precedence[','])
-            item = SliceExpr(index, end_index, stride).set_line(colon.line)
+            item = SliceExpr(index, end_index, stride).set_line(colon.line).set_column(colon.column)
         return item
 
     def parse_bin_op_expr(self, left: Node, prec: int) -> OpExpr:
@@ -1822,12 +1831,13 @@ class Parser:
 
         expr = self.parse_expression(precedence[','])
 
-        nodes = [ReturnStmt(expr).set_line(lambda_tok)]
+        nodes = [ReturnStmt(expr).set_line(lambda_tok).set_column(lambda_tok)]
         # Potentially insert extra assignment statements to the beginning of the
         # body, used to decompose Python 2 tuple arguments.
         nodes[:0] = extra_stmts
         body = Block(nodes)
         body.set_line(colon)
+        body.set_column(colon)
 
         return FuncExpr(args, body, typ)
 
