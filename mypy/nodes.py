@@ -404,6 +404,7 @@ class Argument(Node):
     def set_column(self, target: Union[Token, Node, int]) -> Node:
         # TODO HONK
         super().set_column(target)
+        return self
 
     def serialize(self) -> JsonDict:
         # Note: we are deliberately not saving the type annotation since
@@ -475,6 +476,7 @@ class FuncItem(FuncBase):
     def set_column(self, target: Union[Token, Node, int]) -> Node:
         # TODO HONK HONK
         super().set_column(target)
+        return self
 
     def is_dynamic(self) -> bool:
         return self.type is None
