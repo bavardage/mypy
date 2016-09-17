@@ -993,6 +993,7 @@ class SemanticAnalyzer(NodeVisitor):
             assignment = AssignmentStmt([lvalue], rvalue)
             for node in assignment, lvalue, rvalue:
                 node.set_line(import_node)
+                node.set_column(import_node)
             import_node.assignments.append(assignment)
             return True
         return False
@@ -1222,6 +1223,7 @@ class SemanticAnalyzer(NodeVisitor):
                 v.info = self.type
                 v.is_initialized_in_class = True
                 v.set_line(lval)
+                v.set_column(lval.column)
                 lval.node = v
                 lval.is_def = True
                 lval.kind = MDEF
@@ -1361,7 +1363,9 @@ class SemanticAnalyzer(NodeVisitor):
         # TODO: why does NewType work in local scopes despite always being of kind GDEF?
         node.kind = GDEF
         node.node = newtype_class_info
-        call.analyzed = NewTypeExpr(newtype_class_info).set_line(call.line)
+        call.analyzed = NewTypeExpr(newtype_class_info)\
+            .set_line(call.line)\
+            .set_column(call.column)
 
     def analyze_newtype_declaration(self,
             s: AssignmentStmt) -> Tuple[Optional[str], Optional[CallExpr]]:
@@ -1384,7 +1388,9 @@ class SemanticAnalyzer(NodeVisitor):
             # overwritten later with a fully complete NewTypeExpr if there are no other
             # errors with the NewType() call.
             call = s.rvalue
-            call.analyzed = NewTypeExpr(None).set_line(call.line)
+            call.analyzed = NewTypeExpr(None)\
+                .set_line(call.line)\
+                .set_column(call.column)
 
         return name, call
 
@@ -1614,7 +1620,9 @@ class SemanticAnalyzer(NodeVisitor):
             info = self.build_namedtuple_typeinfo(name, items, types)
             # Store it as a global just in case it would remain anonymous.
             self.globals[name] = SymbolTableNode(GDEF, info, self.cur_mod_id)
-        call.analyzed = NamedTupleExpr(info).set_line(call.line)
+        call.analyzed = NamedTupleExpr(info)\
+            .set_line(call.line)\
+            .set_column(call.column)
         return info
 
     def parse_namedtuple_args(self, call: CallExpr,
@@ -2115,6 +2123,7 @@ class SemanticAnalyzer(NodeVisitor):
         expr = DictExpr([(StrExpr(key), value)
                          for key, value in zip(call.arg_names, call.args)])
         expr.set_line(call)
+        expr.set_column(call)
         expr.accept(self)
         return expr
 
@@ -2533,7 +2542,7 @@ class SemanticAnalyzer(NodeVisitor):
             return
         # In case it's a bug and we don't really have context
         assert ctx is not None, msg
-        self.errors.report(ctx.get_line(), msg, blocker=blocker)
+        self.errors.report(ctx.get_line(), ctx.get_column(), msg, blocker=blocker)
 
     def fail_blocker(self, msg: str, ctx: Context) -> None:
         self.fail(msg, ctx, blocker=True)
@@ -2543,7 +2552,7 @@ class SemanticAnalyzer(NodeVisitor):
                 self.function_stack and
                 self.function_stack[-1].is_dynamic()):
             return
-        self.errors.report(ctx.get_line(), msg, severity='note')
+        self.errors.report(ctx.get_line(), ctx.get_column(), msg, severity='note')
 
     def undefined_name_extra_info(self, fullname: str) -> Optional[str]:
         if fullname in obsolete_name_mapping:
@@ -2673,6 +2682,7 @@ class FirstPass(NodeVisitor):
         cdef.fullname = self.sem.qualified_name(cdef.name)
         info = TypeInfo(SymbolTable(), cdef, self.sem.cur_mod_id)
         info.set_line(cdef.line)
+        info.set_column(cdef.column)
         cdef.info = info
         self.sem.globals[cdef.name] = SymbolTableNode(GDEF, info,
                                                       self.sem.cur_mod_id)
@@ -2867,7 +2877,7 @@ class ThirdPass(TraverserVisitor):
             type.accept(analyzer)
 
     def fail(self, msg: str, ctx: Context, *, blocker: bool = False) -> None:
-        self.errors.report(ctx.get_line(), msg)
+        self.errors.report(ctx.get_line(), ctx.get_column(), msg)
 
     def fail_blocker(self, msg: str, ctx: Context) -> None:
         self.fail(msg, ctx, blocker=True)
