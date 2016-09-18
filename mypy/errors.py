@@ -249,10 +249,12 @@ class Errors:
         a = []  # type: List[str]
         errors = self.render_messages(self.sort_messages(self.error_info))
         errors = self.remove_duplicates(errors)
-        for file, line, severity, message in errors:
+        for file, line, column, severity, message in errors:
             s = ''
             if file is not None:
-                if line is not None and line >= 0:
+                if line is not None and line >= 0 and column is not None and column >= 0:
+                    srcloc = '{}:{}:{}'.format(file, line, column)
+                elif line is not None and line >= 0:
                     srcloc = '{}:{}'.format(file, line)
                 else:
                     srcloc = file
@@ -262,7 +264,7 @@ class Errors:
             a.append(s)
         return a
 
-    def render_messages(self, errors: List[ErrorInfo]) -> List[Tuple[str, int,
+    def render_messages(self, errors: List[ErrorInfo]) -> List[Tuple[str, int, int,
                                                                      str, str]]:
         """Translate the messages into a sequence of tuples.
 
@@ -271,7 +273,8 @@ class Errors:
         item may be None. If the line item is negative, the line
         number is not defined for the tuple.
         """
-        result = []  # type: List[Tuple[str, int, str, str]] # (path, line, severity, message)
+        result = []  # type: List[Tuple[str, int, int, str, str]]
+        # (path, line, column, severity, message)
 
         prev_import_context = []  # type: List[Tuple[str, int]]
         prev_function_or_member = None  # type: str
@@ -294,7 +297,7 @@ class Errors:
                     # Remove prefix to ignore from path (if present) to
                     # simplify path.
                     path = remove_path_prefix(path, self.ignore_prefix)
-                    result.append((None, -1, 'note', fmt.format(path, line)))
+                    result.append((None, -1, -1, 'note', fmt.format(path, line)))
                     i -= 1
 
             file = self.simplify_path(e.file)
@@ -306,27 +309,27 @@ class Errors:
                     e.type != prev_type):
                 if e.function_or_member is None:
                     if e.type is None:
-                        result.append((file, -1, 'note', 'At top level:'))
+                        result.append((file, -1, -1, 'note', 'At top level:'))
                     else:
-                        result.append((file, -1, 'note', 'In class "{}":'.format(
+                        result.append((file, -1, -1, 'note', 'In class "{}":'.format(
                             e.type)))
                 else:
                     if e.type is None:
-                        result.append((file, -1, 'note',
+                        result.append((file, -1, -1, 'note',
                                        'In function "{}":'.format(
                                            e.function_or_member)))
                     else:
-                        result.append((file, -1, 'note',
+                        result.append((file, -1, -1, 'note',
                                        'In member "{}" of class "{}":'.format(
                                            e.function_or_member, e.type)))
             elif e.type != prev_type:
                 if e.type is None:
-                    result.append((file, -1, 'note', 'At top level:'))
+                    result.append((file, -1, -1, 'note', 'At top level:'))
                 else:
-                    result.append((file, -1, 'note',
+                    result.append((file, -1, -1, 'note',
                                    'In class "{}":'.format(e.type)))
 
-            result.append((file, e.line, e.severity, e.message))
+            result.append((file, e.line, e.column, e.severity, e.message))
 
             prev_import_context = e.import_ctx
             prev_function_or_member = e.function_or_member
@@ -357,17 +360,18 @@ class Errors:
             result.extend(a)
         return result
 
-    def remove_duplicates(self, errors: List[Tuple[str, int, str, str]]
-                          ) -> List[Tuple[str, int, str, str]]:
+    def remove_duplicates(self, errors: List[Tuple[str, int, int, str, str]]
+                          ) -> List[Tuple[str, int, int, str, str]]:
         """Remove duplicates from a sorted error list."""
-        res = []  # type: List[Tuple[str, int, str, str]]
+        res = []  # type: List[Tuple[str, int, int, str, str]]
         i = 0
         while i < len(errors):
             dup = False
             j = i - 1
             while (j >= 0 and errors[j][0] == errors[i][0] and
                     errors[j][1] == errors[i][1]):
-                if errors[j] == errors[i]:
+                if (errors[j][3] == errors[i][3] and
+                        errors[j][4] == errors[i][4]):  # ignore column
                     dup = True
                     break
                 j -= 1

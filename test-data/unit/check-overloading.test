@@ -623,7 +623,7 @@ def f(x: Sequence[T]) -> None: pass
 def f(x: Sequence[int]) -> int: pass
 # These are considered overlapping despite the bound on T due to runtime type erasure.
 [out]
-main:4: error: Overloaded function signatures 1 and 2 overlap with incompatible return types
+main:4:0: error: Overloaded function signatures 1 and 2 overlap with incompatible return types
 
 [case testOverlapWithTypeVarsWithValues]
 from typing import overload, TypeVar
@@ -696,8 +696,8 @@ from typing import overload
 def f(a: int) -> None: pass
 def f(a: str) -> None: pass
 [out]
-main:2: error: Single overload definition, multiple required
-main:4: error: Name 'f' already defined
+main:2:0: error: Single overload definition, multiple required
+main:4:0: error: Name 'f' already defined
 
 [case testSingleOverload2]
 from typing import overload
@@ -705,8 +705,8 @@ def f(a: int) -> None: pass
 @overload
 def f(a: str) -> None: pass
 [out]
-main:3: error: Name 'f' already defined
-main:3: error: Single overload definition, multiple required
+main:3:0: error: Name 'f' already defined
+main:3:0: error: Single overload definition, multiple required
 
 [case testNonconsecutiveOverloads]
 from typing import overload
@@ -716,9 +716,9 @@ def f(a: int) -> None: pass
 @overload
 def f(a: str) -> None: pass
 [out]
-main:2: error: Single overload definition, multiple required
-main:5: error: Name 'f' already defined
-main:5: error: Single overload definition, multiple required
+main:2:0: error: Single overload definition, multiple required
+main:5:0: error: Name 'f' already defined
+main:5:0: error: Single overload definition, multiple required
 
 [case testNonconsecutiveOverloadsMissingFirstOverload]
 from typing import overload
@@ -727,8 +727,8 @@ def f(a: int) -> None: pass
 @overload
 def f(a: str) -> None: pass
 [out]
-main:4: error: Name 'f' already defined
-main:4: error: Single overload definition, multiple required
+main:4:0: error: Name 'f' already defined
+main:4:0: error: Single overload definition, multiple required
 
 [case testNonconsecutiveOverloadsMissingLaterOverload]
 from typing import overload
@@ -737,8 +737,8 @@ def f(a: int) -> None: pass
 1
 def f(a: str) -> None: pass
 [out]
-main:2: error: Single overload definition, multiple required
-main:5: error: Name 'f' already defined
+main:2:0: error: Single overload definition, multiple required
+main:5:0: error: Name 'f' already defined
 
 [case testOverloadTuple]
 from typing import overload, Tuple

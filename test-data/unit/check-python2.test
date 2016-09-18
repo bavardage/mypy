@@ -115,11 +115,11 @@ f(1, 1) # E
 [builtins_py2 fixtures/tuple.pyi]
 [out]
 main: note: In function "f":
-main:3: error: "object" not callable
-main:4: error: "int" not callable
-main:5: error: "str" not callable
+main:3:5: error: "object" not callable
+main:4:5: error: "int" not callable
+main:5:5: error: "str" not callable
 main: note: At top level:
-main:7: error: Argument 2 to "f" has incompatible type "int"; expected "Tuple[int, str]"
+main:7:1: error: Argument 2 to "f" has incompatible type "int"; expected "Tuple[int, str]"
 
 [case testNestedTupleArgListAnnotated]
 from typing import Tuple
@@ -133,12 +133,12 @@ f(1, 1) # E
 [builtins fixtures/tuple.pyi]
 [out]
 main: note: In function "f":
-main:3: error: "object" not callable
-main:4: error: "int" not callable
-main:5: error: "str" not callable
-main:6: error: "int" not callable
+main:3:5: error: "object" not callable
+main:4:5: error: "int" not callable
+main:5:5: error: "str" not callable
+main:6:5: error: "int" not callable
 main: note: At top level:
-main:8: error: Argument 2 to "f" has incompatible type "int"; expected "Tuple[int, Tuple[str, int]]"
+main:8:1: error: Argument 2 to "f" has incompatible type "int"; expected "Tuple[int, Tuple[str, int]]"
 
 [case testBackquoteExpr]
 `1`.x # E: "str" has no attribute "x"
@@ -147,10 +147,10 @@ main:8: error: Argument 2 to "f" has incompatible type "int"; expected "Tuple[in
 import asyncio
 import Bastion
 [out]
-main:1: error: Cannot find module named 'asyncio'
-main:1: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
-main:2: error: No library stub file for standard library module 'Bastion'
-main:2: note: (Stub files are from https://github.com/python/typeshed)
+main:1:0: error: Cannot find module named 'asyncio'
+main:1:0: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
+main:2:0: error: No library stub file for standard library module 'Bastion'
+main:2:0: note: (Stub files are from https://github.com/python/typeshed)
 
 [case testImportFromPython2Builtin]
 from __builtin__ import int as i
@@ -183,7 +183,7 @@ def f(x, y, z): # type: (..., int) -> None
     pass
 [out]
 main: note: In function "f":
-main:1: error: Parse error before ): Ellipses cannot accompany other argument types in function type signature.
+main:1:9: error: Parse error before ): Ellipses cannot accompany other argument types in function type signature.
 
 [case testLambdaTupleArgInPython2]
 f = lambda (x, y): x + y

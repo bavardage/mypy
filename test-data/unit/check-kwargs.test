@@ -108,9 +108,9 @@ f(A(), b=B())
 class A: pass
 class B: pass
 [out]
-main:3: error: Unexpected keyword argument "a"
-main:3: error: Unexpected keyword argument "b"
-main:4: error: Unexpected keyword argument "b"
+main:3:1: error: Unexpected keyword argument "a"
+main:3:1: error: Unexpected keyword argument "b"
+main:4:1: error: Unexpected keyword argument "b"
 
 [case testKeywordOnlyArguments]
 import typing

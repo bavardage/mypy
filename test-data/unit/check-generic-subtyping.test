@@ -271,9 +271,9 @@ class D(A):
     def f(self, x: T1, y: S) -> None: pass # TODO: This error could be more specific.
 [out]
 main: note: In class "C":
-main:12: error: Argument 2 of "f" incompatible with supertype "A"
+main:12:4: error: Argument 2 of "f" incompatible with supertype "A"
 main: note: In class "D":
-main:14: error: Signature of "f" incompatible with supertype "A"
+main:14:4: error: Signature of "f" incompatible with supertype "A"
 
 
 -- Inheritance from generic types with implicit dynamic supertype
@@ -558,7 +558,7 @@ class A(B):
 class C: pass
 class D: pass
 [out]
-main:7: error: Incompatible types in assignment (expression has type "A", variable has type I[D])
+main:7:0: error: Incompatible types in assignment (expression has type "A", variable has type I[D])
 main: note: In class "A":
 
 [case testSubclassingGenericABCWithDeepHierarchy2]

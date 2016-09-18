@@ -65,7 +65,7 @@ class B(A):
         super().f = None
 [out]
 main: note: In function "g":
-main:6: error: Invalid assignment target
+main:6:15: error: Invalid assignment target
 
 [case testSuperWithMultipleInheritance]
 import typing
@@ -97,9 +97,9 @@ B(1) # E
 [builtins fixtures/__new__.pyi]
 [out]
 main: note: In member "__new__" of class "B":
-main:8: error: Argument 2 to "__new__" of "A" has incompatible type "str"; expected "int"
+main:8:23: error: Argument 2 to "__new__" of "A" has incompatible type "str"; expected "int"
 main: note: At top level:
-main:10: error: Argument 1 to "B" has incompatible type "int"; expected "str"
+main:10:1: error: Argument 1 to "B" has incompatible type "int"; expected "str"
 
 [case testSuperWithUnknownBase]
 from typing import Any

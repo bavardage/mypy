@@ -413,8 +413,8 @@ def g(x: T) -> T: pass
 c(g(''))
 c(g(1))
 [out]
-main:6: error: Argument 1 to "c" has incompatible type "str"; expected "ss"
-main:7: error: Argument 1 to "c" has incompatible type "int"; expected "ss"
+main:6:1: error: Argument 1 to "c" has incompatible type "str"; expected "ss"
+main:7:1: error: Argument 1 to "c" has incompatible type "int"; expected "ss"
 
 
 -- Special cases

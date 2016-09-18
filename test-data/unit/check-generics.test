@@ -15,7 +15,7 @@ class A(Generic[T]):
 class B: pass
 class C: pass
 [out]
-main:4: error: Incompatible types in assignment (expression has type "B", variable has type "C")
+main:4:0: error: Incompatible types in assignment (expression has type "B", variable has type "C")
 
 [case testGenericMethodArgument]
 from typing import TypeVar, Generic
@@ -33,7 +33,7 @@ class A(Generic[T]):
 class B: pass
 class C: pass
 [out]
-main:3: error: Argument 1 to "f" of "A" has incompatible type "C"; expected "B"
+main:3:3: error: Argument 1 to "f" of "A" has incompatible type "C"; expected "B"
 
 [case testGenericMemberVariable]
 from typing import TypeVar, Generic
@@ -49,7 +49,7 @@ a.v = b
 class B: pass
 class C: pass
 [out]
-main:8: error: Incompatible types in assignment (expression has type "C", variable has type "B")
+main:8:1: error: Incompatible types in assignment (expression has type "C", variable has type "B")
 
 [case testGenericMemberVariable]
 from typing import TypeVar, Generic
@@ -63,7 +63,7 @@ class A(Generic[T]):
 class B: pass
 class C: pass
 [out]
-main:4: error: Incompatible types in assignment (expression has type "C", variable has type "B")
+main:4:1: error: Incompatible types in assignment (expression has type "C", variable has type "B")
 
 [case testSimpleGenericSubtyping]
 from typing import TypeVar, Generic
@@ -79,8 +79,8 @@ class A(Generic[T]): pass
 class B: pass
 class C(B): pass
 [out]
-main:4: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
-main:5: error: Incompatible types in assignment (expression has type A[C], variable has type A[B])
+main:4:0: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
+main:5:0: error: Incompatible types in assignment (expression has type A[C], variable has type A[B])
 
 [case testGenericTypeCompatibilityWithAny]
 from typing import Any, TypeVar, Generic
@@ -115,8 +115,8 @@ class A(Generic[T]):
 class B: pass
 class C: pass
 [out]
-main:7: error: Incompatible types in assignment (expression has type A[C], variable has type A[B])
-main:8: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
+main:7:1: error: Incompatible types in assignment (expression has type A[C], variable has type A[B])
+main:8:0: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
 
 [case testMultipleGenericTypeParametersWithMemberVars]
 from typing import TypeVar, Generic
@@ -138,8 +138,8 @@ class A(Generic[S, T]):
 class B: pass
 class C: pass
 [out]
-main:8: error: Incompatible types in assignment (expression has type "B", variable has type "C")
-main:9: error: Incompatible types in assignment (expression has type "C", variable has type "B")
+main:8:0: error: Incompatible types in assignment (expression has type "B", variable has type "C")
+main:9:0: error: Incompatible types in assignment (expression has type "C", variable has type "B")
 
 [case testMultipleGenericTypeParametersWithMethods]
 from typing import TypeVar, Generic
@@ -158,8 +158,8 @@ class A(Generic[S, T]):
 class B: pass
 class C: pass
 [out]
-main:8: error: Argument 2 to "f" of "A" has incompatible type "B"; expected "C"
-main:9: error: Argument 1 to "f" of "A" has incompatible type "C"; expected "B"
+main:8:3: error: Argument 2 to "f" of "A" has incompatible type "B"; expected "C"
+main:9:3: error: Argument 1 to "f" of "A" has incompatible type "C"; expected "B"
 
 [case testMultipleGenericTypeParametersAndSubtyping]
 from typing import TypeVar, Generic
@@ -183,9 +183,9 @@ class A(Generic[S, T]):
 class B: pass
 class C(B):pass
 [out]
-main:8: error: Incompatible types in assignment (expression has type A[B, C], variable has type A[B, B])
-main:9: error: Incompatible types in assignment (expression has type A[C, B], variable has type A[B, B])
-main:10: error: Incompatible types in assignment (expression has type A[B, B], variable has type A[B, C])
+main:8:0: error: Incompatible types in assignment (expression has type A[B, C], variable has type A[B, B])
+main:9:0: error: Incompatible types in assignment (expression has type A[C, B], variable has type A[B, B])
+main:10:0: error: Incompatible types in assignment (expression has type A[B, B], variable has type A[B, C])
 
 
 -- Simple generic type bodies
@@ -208,8 +208,8 @@ x = None # type: B
 class B: pass
 [out]
 main: note: In member "f" of class "A":
-main:7: error: Argument 1 to "f" of "A" has incompatible type "B"; expected "T"
-main:8: error: Incompatible types in assignment (expression has type A[T], variable has type A[B])
+main:7:14: error: Argument 1 to "f" of "A" has incompatible type "B"; expected "T"
+main:8:8: error: Incompatible types in assignment (expression has type A[T], variable has type A[B])
 
 [case testGenericTypeBodyWithMultipleVariables]
 from typing import TypeVar, Generic
@@ -229,10 +229,10 @@ class A(Generic[S, T]):
 class B: pass
 [out]
 main: note: In member "f" of class "A":
-main:8: error: Incompatible types in assignment (expression has type "T", variable has type "S")
-main:9: error: Incompatible types in assignment (expression has type "S", variable has type "T")
-main:10: error: Incompatible types in assignment (expression has type A[S, T], variable has type A[S, B])
-main:11: error: Incompatible types in assignment (expression has type A[S, T], variable has type A[T, T])
+main:8:8: error: Incompatible types in assignment (expression has type "T", variable has type "S")
+main:9:8: error: Incompatible types in assignment (expression has type "S", variable has type "T")
+main:10:8: error: Incompatible types in assignment (expression has type A[S, T], variable has type A[S, B])
+main:11:8: error: Incompatible types in assignment (expression has type A[S, T], variable has type A[T, T])
 
 [case testCompatibilityOfNoneWithTypeVar]
 from typing import TypeVar, Generic
@@ -254,8 +254,8 @@ class A(Generic[T]):
         b = self.f()
 [out]
 main: note: In member "f" of class "A":
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "T")
-main:6: error: Incompatible types in assignment (expression has type "object", variable has type "T")
+main:5:8: error: Incompatible types in assignment (expression has type "object", variable has type "T")
+main:6:8: error: Incompatible types in assignment (expression has type "object", variable has type "T")
 
 
 -- Operations with generic types
@@ -285,10 +285,10 @@ class A(Generic[S, T]):
 class B: pass
 class C: pass
 [out]
-main:8: error: Incompatible types in assignment (expression has type "C", variable has type "B")
-main:9: error: Unsupported operand types for + ("A" and "C")
-main:10: error: Incompatible types in assignment (expression has type "B", variable has type "C")
-main:11: error: Invalid index type "B" for "A"
+main:8:0: error: Incompatible types in assignment (expression has type "C", variable has type "B")
+main:9:6: error: Unsupported operand types for + ("A" and "C")
+main:10:0: error: Incompatible types in assignment (expression has type "B", variable has type "C")
+main:11:5: error: Invalid index type "B" for "A"
 
 [case testOperatorAssignmentWithIndexLvalue1]
 from typing import TypeVar, Generic
@@ -310,9 +310,9 @@ class B: pass
 class C:
     def __add__(self, o: 'C') -> 'C': pass
 [out]
-main:7: error: Unsupported operand types for + ("C" and "B")
-main:7: error: Incompatible types in assignment (expression has type "B", target has type "C")
-main:8: error: Invalid index type "C" for "A"
+main:7:0: error: Unsupported operand types for + ("C" and "B")
+main:7:9: error: Incompatible types in assignment (expression has type "B", target has type "C")
+main:8:2: error: Invalid index type "C" for "A"
 
 [case testOperatorAssignmentWithIndexLvalue2]
 from typing import TypeVar, Generic
@@ -333,9 +333,9 @@ class B: pass
 class C:
     def __add__(self, o: 'C') -> 'C': pass
 [out]
-main:7: error: Invalid index type "B" for "A"
-main:8: error: Invalid index type "C" for "A"
-main:9: error: Invalid index type "B" for "A"
+main:7:9: error: Invalid index type "B" for "A"
+main:8:2: error: Invalid index type "C" for "A"
+main:9:14: error: Invalid index type "B" for "A"
 
 
 -- Nested generic types
@@ -367,8 +367,8 @@ class B:
 class C:
     pass
 [out]
-main:8: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
-main:9: error: Incompatible types in assignment (expression has type A[A[B]], variable has type A[A[C]])
+main:8:0: error: Incompatible types in assignment (expression has type A[B], variable has type A[C])
+main:9:2: error: Incompatible types in assignment (expression has type A[A[B]], variable has type A[A[C]])
 
 
 -- Generic functions
@@ -446,7 +446,7 @@ class A: pass
 a[A]() # Fail
 A[A]() # Fail
 [out]
-main:4: error: Value of type "A" is not indexable
+main:4:1: error: Value of type "A" is not indexable
 main:5: error: Generic type is prohibited as a runtime expression (use a type alias or '# type:' comment)
 
 
@@ -804,7 +804,7 @@ def f(a: T, b: T) -> T:
 [builtins fixtures/ops.pyi]
 [out]
 main: note: In function "f":
-main:4: error: Unsupported left operand type for < ("T")
+main:4:9: error: Unsupported left operand type for < ("T")
 
 
 -- Subtyping generic callables

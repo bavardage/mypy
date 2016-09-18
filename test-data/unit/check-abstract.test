@@ -267,8 +267,8 @@ class A(I):
         pass
 [out]
 main: note: In class "A":
-main:11: error: Argument 1 of "h" incompatible with supertype "I"
-main:11: error: Return type of "h" incompatible with supertype "I"
+main:11:4: error: Argument 1 of "h" incompatible with supertype "I"
+main:11:4: error: Return type of "h" incompatible with supertype "I"
 
 
 -- Accessing abstract members
@@ -514,7 +514,7 @@ class B(metaclass=ABCMeta):
 class C(A, B): pass
 [out]
 main: note: In class "C":
-main:8: error: Definition of "f" in base class "A" is incompatible with definition in base class "B"
+main:8:0: error: Definition of "f" in base class "A" is incompatible with definition in base class "B"
 
 [case testCallAbstractMethodBeforeDefinition]
 import typing
@@ -648,9 +648,9 @@ b.x() # E
 [builtins fixtures/property.pyi]
 [out]
 main: note: In class "B":
-main:7: error: Return type of "x" incompatible with supertype "A"
+main:7:4: error: Return type of "x" incompatible with supertype "A"
 main: note: At top level:
-main:9: error: "str" not callable
+main:9:3: error: "str" not callable
 
 [case testCantImplementAbstractPropertyViaInstanceVariable]
 from abc import abstractproperty, ABCMeta
@@ -665,10 +665,10 @@ b.x.y # E
 [builtins fixtures/property.pyi]
 [out]
 main: note: In member "__init__" of class "B":
-main:7: error: Property "x" defined in "B" is read-only
+main:7:12: error: Property "x" defined in "B" is read-only
 main: note: At top level:
-main:8: error: Cannot instantiate abstract class 'B' with abstract attribute 'x'
-main:9: error: "int" has no attribute "y"
+main:8:5: error: Cannot instantiate abstract class 'B' with abstract attribute 'x'
+main:9:3: error: "int" has no attribute "y"
 
 [case testSuperWithAbstractProperty]
 from abc import abstractproperty, ABCMeta
@@ -700,9 +700,9 @@ class B(A):
 [builtins fixtures/property.pyi]
 [out]
 main: note: In member "x" of class "B":
-main:10: error: "int" has no attribute "y"
+main:10:24: error: "int" has no attribute "y"
 main: note: In function "x":
-main:13: error: Invalid assignment target
+main:13:15: error: Invalid assignment target
 
 [case testOnlyImplementGetterOfReadWriteAbstractProperty]
 from abc import abstractproperty, ABCMeta
@@ -719,9 +719,9 @@ b.x.y # E
 [builtins fixtures/property.pyi]
 [out]
 main: note: In class "B":
-main:8: error: Read-only property cannot override read-write property
+main:8:4: error: Read-only property cannot override read-write property
 main: note: At top level:
-main:11: error: "int" has no attribute "y"
+main:11:3: error: "int" has no attribute "y"
 
 [case testDynamicallyTypedReadOnlyAbstractProperty]
 from abc import abstractproperty, ABCMeta

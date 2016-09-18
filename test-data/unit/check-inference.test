@@ -13,8 +13,8 @@ x = x
 class A: pass
 class B: pass
 [out]
-main:4: error: Incompatible types in assignment (expression has type "B", variable has type "A")
-main:6: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:4:0: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:6:0: error: Incompatible types in assignment (expression has type "B", variable has type "A")
 
 [case testInferSimpleLvarType]
 import typing
@@ -29,8 +29,8 @@ class A: pass
 class B: pass
 [out]
 main: note: In function "f":
-main:5: error: Incompatible types in assignment (expression has type "B", variable has type "A")
-main:7: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:5:2: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:7:2: error: Incompatible types in assignment (expression has type "B", variable has type "A")
 
 [case testLvarInitializedToVoid]
 import typing
@@ -289,8 +289,8 @@ def f() -> None:
 [builtins fixtures/tuple.pyi]
 [out]
 main: note: In function "f":
-main:5: error: Too many values to unpack (2 expected, 3 provided)
-main:6: error: Need more than 3 values to unpack (4 expected)
+main:5:5: error: Too many values to unpack (2 expected, 3 provided)
+main:6:5: error: Need more than 3 values to unpack (4 expected)
 
 [case testInvalidRvalueTypeInInferredMultipleLvarDefinition]
 import typing
@@ -465,8 +465,8 @@ def f(a: T, b: T) -> None: pass
 def g() -> None: pass
 class A: pass
 [out]
-main:3: error: Cannot infer type argument 1 of "f"
-main:3: error: "g" does not return a value
+main:3:1: error: Cannot infer type argument 1 of "f"
+main:3:1: error: "g" does not return a value
 
 [case testInferenceWithMultipleConstraints]
 from typing import TypeVar
@@ -506,10 +506,10 @@ class A: pass
 class B: pass
 [builtins fixtures/tuple.pyi]
 [out]
-main:9: error: Argument 2 to "f" has incompatible type "B"; expected "A"
-main:10: error: Argument 1 to "f" has incompatible type "B"; expected "A"
-main:11: error: Argument 1 to "f" has incompatible type "A"; expected "B"
-main:11: error: Argument 2 to "f" has incompatible type "B"; expected "A"
+main:9:7: error: Argument 2 to "f" has incompatible type "B"; expected "A"
+main:10:7: error: Argument 1 to "f" has incompatible type "B"; expected "A"
+main:11:7: error: Argument 1 to "f" has incompatible type "A"; expected "B"
+main:11:7: error: Argument 2 to "f" has incompatible type "B"; expected "A"
 
 [case testConstraintSolvingWithSimpleGenerics]
 from typing import TypeVar, Generic
@@ -858,12 +858,12 @@ class B: pass
 class C: pass
 [builtins fixtures/for.pyi]
 [out]
-main:4: error: Incompatible types in assignment (expression has type "A", variable has type "B")
-main:5: error: Incompatible types in assignment (expression has type "B", variable has type "C")
-main:6: error: Incompatible types in assignment (expression has type "C", variable has type "A")
-main:10: error: Need more than 2 values to unpack (3 expected)
-main:12: error: '__main__.B' object is not iterable
-main:14: error: Need type annotation for variable
+main:4:4: error: Incompatible types in assignment (expression has type "A", variable has type "B")
+main:5:4: error: Incompatible types in assignment (expression has type "B", variable has type "C")
+main:6:4: error: Incompatible types in assignment (expression has type "C", variable has type "A")
+main:10:4: error: Need more than 2 values to unpack (3 expected)
+main:12:11: error: '__main__.B' object is not iterable
+main:14:4: error: Need type annotation for variable
 
 [case testInferenceOfFor3]
 
@@ -1046,8 +1046,8 @@ X = TypeVar('X')
 def f(x: Callable[[X], X], y: str) -> X: pass
 y = f(lambda x: x, 1) # Fail
 [out]
-main:4: error: Cannot infer type argument 1 of "f"
-main:4: error: Argument 2 to "f" has incompatible type "int"; expected "str"
+main:4:5: error: Cannot infer type argument 1 of "f"
+main:4:5: error: Argument 2 to "f" has incompatible type "int"; expected "str"
 
 [case testInferLambdaNone]
 from typing import Callable
@@ -1441,9 +1441,9 @@ class A:
         self.x()
 [out]
 main: note: In member "f" of class "A":
-main:3: error: Need type annotation for variable
+main:3:12: error: Need type annotation for variable
 main: note: In member "g" of class "A":
-main:7: error: "int" not callable
+main:7:14: error: "int" not callable
 
 [case testGlobalInitializedToNoneSetFromFunction]
 a = None
@@ -1473,9 +1473,9 @@ class A:
 [builtins fixtures/for.pyi]
 [out]
 main: note: In class "A":
-main:3: error: Need type annotation for variable
+main:3:4: error: Need type annotation for variable
 main: note: In member "f" of class "A":
-main:5: error: None has no attribute "__iter__"
+main:5:21: error: None has no attribute "__iter__"
 
 [case testPartialTypeErrorSpecialCase2]
 # This used to crash.
@@ -1487,9 +1487,9 @@ class A:
 [builtins fixtures/for.pyi]
 [out]
 main: note: In member "f" of class "A":
-main:3: error: Need type annotation for variable
+main:3:4: error: Need type annotation for variable
 main: note: In class "A":
-main:3: error: Need type annotation for variable
+main:3:4: error: Need type annotation for variable
 
 [case testPartialTypeErrorSpecialCase3]
 class A:
@@ -1500,9 +1500,9 @@ class A:
 [builtins fixtures/for.pyi]
 [out]
 main: note: In class "A":
-main:2: error: Need type annotation for variable
+main:2:4: error: Need type annotation for variable
 main: note: In member "f" of class "A":
-main:4: error: None has no attribute "__iter__"
+main:4:18: error: None has no attribute "__iter__"
 
 
 -- Multipass
@@ -1578,10 +1578,10 @@ class A:
         self.y() # E
 [out]
 main: note: In member "f" of class "A":
-main:5: error: "int" not callable
-main:6: error: "int" not callable
+main:5:14: error: "int" not callable
+main:6:14: error: "int" not callable
 main: note: In member "h" of class "A":
-main:12: error: "int" not callable
+main:12:14: error: "int" not callable
 
 [case testMultipassAndPartialTypes]
 def f() -> None:
@@ -1719,9 +1719,9 @@ y = 0
 [out]
 main:1: note: In module imported here:
 tmp/m.py: note: In function "g":
-tmp/m.py:2: error: "int" not callable
+tmp/m.py:2:5: error: "int" not callable
 main: note: In function "f":
-main:3: error: "int" not callable
+main:3:5: error: "int" not callable
 
 
 -- Tests for special cases of unification
@@ -1832,5 +1832,5 @@ T = TypeVar('T')
 class C(Sequence[T], Generic[T]): pass
 C[0] = 0
 [out]
-main:4: error: Type expected within [...]
-main:4: error: Unsupported target for indexed assignment
+main:4:1: error: Type expected within [...]
+main:4:7: error: Unsupported target for indexed assignment

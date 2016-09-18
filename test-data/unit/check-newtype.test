@@ -36,8 +36,8 @@ tcp_packet = TcpPacketId(packet)
 tcp_packet = TcpPacketId(127, 0)
 
 [out]
-main:12: error: Too many arguments for "TcpPacketId"
-main:12: error: Argument 1 to "TcpPacketId" has incompatible type "int"; expected "PacketId"
+main:12:24: error: Too many arguments for "TcpPacketId"
+main:12:24: error: Argument 1 to "TcpPacketId" has incompatible type "int"; expected "PacketId"
 
 [case testNewTypeWithTuples]
 from typing import NewType, Tuple
@@ -278,7 +278,7 @@ B = NewType('B', List[T])
 [builtins fixtures/list.pyi]
 [out]
 main:3: error: Invalid type "__main__.T"
-main:3: error: Argument 2 to NewType(...) must be subclassable (got T?)
+main:3:0: error: Argument 2 to NewType(...) must be subclassable (got T?)
 main:4: error: Invalid type "__main__.T"
 
 [case testNewTypeWithNewTypeFails]
@@ -301,10 +301,10 @@ b = NewType('b', float)  # this line throws two errors
 
 c = NewType('c', str)   # type: str
 [out]
-main:4: error: Cannot redefine 'a' as a NewType
-main:7: error: Invalid assignment target
-main:7: error: Cannot redefine 'b' as a NewType
-main:9: error: Cannot declare the type of a NewType declaration
+main:4:0: error: Cannot redefine 'a' as a NewType
+main:7:0: error: Invalid assignment target
+main:7:0: error: Cannot redefine 'b' as a NewType
+main:9:0: error: Cannot declare the type of a NewType declaration
 
 [case testNewTypeAddingExplicitTypesFails]
 from typing import NewType

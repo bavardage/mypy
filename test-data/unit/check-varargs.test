@@ -209,7 +209,7 @@ class A: pass
 class B: pass
 [builtins fixtures/list.pyi]
 [out]
-main:7: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
+main:7:1: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
 
 [case testCallingWithTupleVarArgs]
 
@@ -278,13 +278,13 @@ class A: pass
 class B: pass
 [builtins fixtures/list.pyi]
 [out]
-main:3: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
-main:4: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
-main:5: error: Argument 1 to "f" has incompatible type "B"; expected "A"
-main:6: error: Argument 2 to "f" has incompatible type "A"; expected "B"
-main:7: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
-main:8: error: Argument 1 to "f" has incompatible type "B"; expected "A"
-main:9: error: Argument 1 to "g" has incompatible type *List[B]; expected "A"
+main:3:1: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
+main:4:1: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
+main:5:1: error: Argument 1 to "f" has incompatible type "B"; expected "A"
+main:6:1: error: Argument 2 to "f" has incompatible type "A"; expected "B"
+main:7:1: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
+main:8:1: error: Argument 1 to "f" has incompatible type "B"; expected "A"
+main:9:1: error: Argument 1 to "g" has incompatible type *List[B]; expected "A"
 
 [case testCallingVarArgsFunctionWithTupleVarArgs]
 
@@ -333,8 +333,8 @@ def g(a: 'A', *b: 'A') -> None: pass
 class A: pass
 [builtins fixtures/list.pyi]
 [out]
-main:3: error: Too many arguments for "f"
-main:4: error: Too many arguments for "f"
+main:3:1: error: Too many arguments for "f"
+main:4:1: error: Too many arguments for "f"
 
 [case testListVarArgsAndSubtyping]
 from typing import List
@@ -377,26 +377,26 @@ class A: pass
 class B: pass
 [builtins fixtures/list.pyi]
 [out]
-main:3: error: Too few arguments for "f"
-main:4: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
-main:5: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
-main:6: error: Argument 1 to "f" has incompatible type *"Tuple[A, A, B]"; expected "B"
+main:3:1: error: Too few arguments for "f"
+main:4:1: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
+main:5:1: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
+main:6:1: error: Argument 1 to "f" has incompatible type *"Tuple[A, A, B]"; expected "B"
 
 [case testVarArgsAfterKeywordArgInCall1]
 def f(x: int, y: str) -> None: pass
 f(x=1, *[2])
 [builtins fixtures/list.pyi]
 [out]
-main:2: error: "f" gets multiple values for keyword argument "x"
-main:2: error: Argument 2 to "f" has incompatible type *List[int]; expected "str"
+main:2:1: error: "f" gets multiple values for keyword argument "x"
+main:2:1: error: Argument 2 to "f" has incompatible type *List[int]; expected "str"
 
 [case testVarArgsAfterKeywordArgInCall2]
 def f(x: int, y: str) -> None: pass
 f(y='x', *[1])
 [builtins fixtures/list.pyi]
 [out]
-main:2: error: "f" gets multiple values for keyword argument "y"
-main:2: error: Argument 2 to "f" has incompatible type *List[int]; expected "str"
+main:2:1: error: "f" gets multiple values for keyword argument "y"
+main:2:1: error: Argument 2 to "f" has incompatible type *List[int]; expected "str"
 
 [case testVarArgsAfterKeywordArgInCall3]
 def f(x: int, y: str) -> None: pass
@@ -488,13 +488,13 @@ class A: pass
 class B: pass
 [builtins fixtures/list.pyi]
 [out]
-main:6: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
-main:7: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
-main:8: error: Argument 1 to "f" has incompatible type "B"; expected "A"
-main:9: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
-main:10: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
-main:11: error: List or tuple expected as variable arguments
-main:12: error: List or tuple expected as variable arguments
+main:6:8: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
+main:7:8: error: Argument 1 to "f" has incompatible type *List[A]; expected "B"
+main:8:8: error: Argument 1 to "f" has incompatible type "B"; expected "A"
+main:9:8: error: Argument 2 to "f" has incompatible type *List[A]; expected "B"
+main:10:8: error: Argument 3 to "f" has incompatible type *List[A]; expected "B"
+main:11:8: error: List or tuple expected as variable arguments
+main:12:8: error: List or tuple expected as variable arguments
 
 [case testCallerVarArgsTupleWithTypeInference]
 from typing import TypeVar, Tuple
@@ -541,11 +541,11 @@ class A: pass
 class B: pass
 [builtins fixtures/list.pyi]
 [out]
-main:9: error: Incompatible types in assignment (expression has type List[A], variable has type "A")
-main:9: error: Incompatible types in assignment (expression has type List[None], variable has type List[A])
-main:10: error: Incompatible types in assignment (expression has type List[None], variable has type "A")
-main:11: error: Argument 1 to "f" of "G" has incompatible type *List[A]; expected "B"
-main:11: error: Incompatible types in assignment (expression has type List[None], variable has type List[A])
+main:9:0: error: Incompatible types in assignment (expression has type List[A], variable has type "A")
+main:9:3: error: Incompatible types in assignment (expression has type List[None], variable has type List[A])
+main:10:4: error: Incompatible types in assignment (expression has type List[None], variable has type "A")
+main:11:14: error: Argument 1 to "f" of "G" has incompatible type *List[A]; expected "B"
+main:11:4: error: Incompatible types in assignment (expression has type List[None], variable has type List[A])
 
 
 -- Comment signatures

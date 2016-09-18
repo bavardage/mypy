@@ -1131,7 +1131,7 @@ def f(x: Union[List[int], str]) -> None:
 [builtins fixtures/isinstancelist.pyi]
 [out]
 main: note: In function "f":
-main:4: error: "int" not callable
+main:4:12: error: "int" not callable
 
 [case testIsinstanceOrIsinstance]
 class A: pass

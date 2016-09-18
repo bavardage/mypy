@@ -39,7 +39,7 @@ from m import a # type: ignore
 +
 [out]
 main:1: note: In module imported here:
-tmp/m.py:1: error: Parse error before end of line
+tmp/m.py:1:1: error: Parse error before end of line
 
 [case testIgnoreAppliesOnlyToMissing]
 import a # type: ignore
@@ -61,7 +61,7 @@ from m import * # type: ignore
 +
 [out]
 main:1: note: In module imported here:
-tmp/m.py:1: error: Parse error before end of line
+tmp/m.py:1:1: error: Parse error before end of line
 
 [case testIgnoreAssignmentTypeError]
 x = 1
@@ -199,7 +199,7 @@ foo(Child())
 def bar(x: Base[str, str]) -> None: pass
 bar(Child())
 [out]
-main:19: error: Argument 1 to "bar" has incompatible type "Child"; expected Base[str, str]
+main:19:3: error: Argument 1 to "bar" has incompatible type "Child"; expected Base[str, str]
 
 [case testTypeIgnoreLineNumberWithinFile]
 import m
@@ -209,8 +209,8 @@ m.f(kw=1)
 pass
 def f() -> None: pass
 [out]
-main:3: error: Unexpected keyword argument "kw" for "f"
-tmp/m.py:2: note: "f" defined here
+main:3:3: error: Unexpected keyword argument "kw" for "f"
+tmp/m.py:2:0: note: "f" defined here
 
 [case testCannotIgnoreBlockingError]
 yield  # type: ignore  # E: 'yield' outside function

@@ -151,7 +151,7 @@ x = 1
 x = 'a'
 [out]
 main:2: note: In module imported here:
-tmp/m.py:4: error: Incompatible types in assignment (expression has type "str", variable has type "int")
+tmp/m.py:4:0: error: Incompatible types in assignment (expression has type "str", variable has type "int")
 [case testWeakReassignment]
 # mypy: weak=global
 x = 1

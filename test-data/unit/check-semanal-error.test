@@ -18,9 +18,9 @@ m.foo()
 m.x = m.y
 1() # E
 [out]
-main:1: error: Cannot find module named 'm'
-main:1: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
-main:4: error: "int" not callable
+main:1:0: error: Cannot find module named 'm'
+main:1:0: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
+main:4:1: error: "int" not callable
 
 [case testMissingModuleImport2]
 from m import x # E
@@ -28,19 +28,19 @@ x.foo()
 x.a = x.b
 1() # E
 [out]
-main:1: error: Cannot find module named 'm'
-main:1: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
-main:4: error: "int" not callable
+main:1:0: error: Cannot find module named 'm'
+main:1:0: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
+main:4:1: error: "int" not callable
 
 [case testMissingModuleImport3]
 from m import * # E
 x # E
 1() # E
 [out]
-main:1: error: Cannot find module named 'm'
-main:1: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
-main:2: error: Name 'x' is not defined
-main:3: error: "int" not callable
+main:1:0: error: Cannot find module named 'm'
+main:1:0: note: (Perhaps setting MYPYPATH or using the "--silent-imports" flag would help)
+main:2:0: error: Name 'x' is not defined
+main:3:1: error: "int" not callable
 
 [case testInvalidBaseClass1]
 class A(X): # E: Name 'X' is not defined
@@ -56,8 +56,8 @@ A().foo(1)
 A().x = '' # E
 [out]
 main:2: error: Invalid type "__main__.X"
-main:2: error: Invalid base class
-main:5: error: Incompatible types in assignment (expression has type "str", variable has type "int")
+main:2:8: error: Invalid base class
+main:5:3: error: Incompatible types in assignment (expression has type "str", variable has type "int")
 
 
 [case testInvalidNumberOfTypeArgs]

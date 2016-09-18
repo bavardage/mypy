@@ -25,10 +25,10 @@ b = f(b)
 b = f(C()) # Fail
 [out]
 main: note: In function "g":
-main:12: error: Type argument 1 of "f" has incompatible value "U"
+main:12:12: error: Type argument 1 of "f" has incompatible value "U"
 main: note: At top level:
-main:16: error: Type argument 1 of "f" has incompatible value "D"
-main:20: error: Incompatible types in assignment (expression has type "C", variable has type "B")
+main:16:1: error: Type argument 1 of "f" has incompatible value "D"
+main:20:0: error: Incompatible types in assignment (expression has type "C", variable has type "B")
 
 
 [case testBoundOnGenericClass]
@@ -128,9 +128,9 @@ def k(x: TA) -> B:
     return x # Fail
 [out]
 main: note: In function "g2":
-main:16: error: Type argument 1 of "h" has incompatible value "TA"
+main:16:12: error: Type argument 1 of "h" has incompatible value "TA"
 main: note: In function "k":
-main:21: error: Incompatible return value type (got "TA", expected "B")
+main:21:4: error: Incompatible return value type (got "TA", expected "B")
 
 
 [case testBoundMethodUsage]

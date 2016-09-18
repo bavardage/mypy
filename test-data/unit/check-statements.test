@@ -14,7 +14,7 @@ class B:
     pass
 [out]
 main: note: In function "g":
-main:5: error: Incompatible return value type (got "A", expected "B")
+main:5:4: error: Incompatible return value type (got "A", expected "B")
 
 [case testReturnSubtype]
 import typing
@@ -28,7 +28,7 @@ class B(A):
     pass
 [out]
 main: note: In function "f":
-main:3: error: Incompatible return value type (got "A", expected "B")
+main:3:4: error: Incompatible return value type (got "A", expected "B")
 
 [case testReturnWithoutAValue]
 import typing
@@ -40,7 +40,7 @@ class A:
     pass
 [out]
 main: note: In function "f":
-main:3: error: Return value expected
+main:3:4: error: Return value expected
 
 [case testReturnNoneInFunctionReturningNone]
 import typing
@@ -136,8 +136,8 @@ while b:
 class A: pass
 [builtins fixtures/bool.pyi]
 [out]
-main:5: error: Incompatible types in assignment (expression has type "bool", variable has type "A")
-main:7: error: Incompatible types in assignment (expression has type "bool", variable has type "A")
+main:5:4: error: Incompatible types in assignment (expression has type "bool", variable has type "A")
+main:7:4: error: Incompatible types in assignment (expression has type "bool", variable has type "A")
 
 [case testForStatement]
 
@@ -151,8 +151,8 @@ else:
 class A: pass
 [builtins fixtures/list.pyi]
 [out]
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "A")
-main:7: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:5:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:7:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
 
 [case testBreakStatement]
 import typing
@@ -189,9 +189,9 @@ class B:
 
 class C: pass
 [out]
-main:3: error: Unsupported operand types for + ("A" and "B")
-main:4: error: Result type of + incompatible in assignment
-main:5: error: Unsupported left operand type for + ("C")
+main:3:0: error: Unsupported operand types for + ("A" and "B")
+main:4:0: error: Result type of + incompatible in assignment
+main:5:0: error: Unsupported left operand type for + ("C")
 
 [case testMinusAssign]
 
@@ -209,9 +209,9 @@ class B:
 
 class C: pass
 [out]
-main:3: error: Unsupported operand types for - ("A" and "B")
-main:4: error: Result type of - incompatible in assignment
-main:5: error: Unsupported left operand type for - ("C")
+main:3:0: error: Unsupported operand types for - ("A" and "B")
+main:4:0: error: Result type of - incompatible in assignment
+main:5:0: error: Unsupported left operand type for - ("C")
 
 [case testMulAssign]
 
@@ -225,8 +225,8 @@ class A:
 
 class C: pass
 [out]
-main:3: error: Unsupported operand types for * ("A" and "A")
-main:4: error: Unsupported left operand type for * ("C")
+main:3:0: error: Unsupported operand types for * ("A" and "A")
+main:4:0: error: Unsupported left operand type for * ("C")
 
 [case testDivAssign]
 
@@ -240,8 +240,8 @@ class A:
 
 class C: pass
 [out]
-main:3: error: Unsupported operand types for / ("A" and "A")
-main:4: error: Unsupported left operand type for / ("C")
+main:3:0: error: Unsupported operand types for / ("A" and "A")
+main:4:0: error: Unsupported left operand type for / ("C")
 
 [case testPowAssign]
 
@@ -255,8 +255,8 @@ class A:
 
 class C: pass
 [out]
-main:3: error: Unsupported operand types for ** ("A" and "A")
-main:4: error: Unsupported left operand type for ** ("C")
+main:3:0: error: Unsupported operand types for ** ("A" and "A")
+main:4:0: error: Unsupported left operand type for ** ("C")
 
 [case testSubtypesInOperatorAssignment]
 
@@ -286,9 +286,9 @@ class A:
     def __floordiv__(self, x: 'C') -> 'A': pass
 class C: pass
 [out]
-main:3: error: Unsupported operand types for & ("A" and "A")
-main:4: error: Unsupported operand types for >> ("A" and "A")
-main:5: error: Unsupported operand types for // ("A" and "A")
+main:3:0: error: Unsupported operand types for & ("A" and "A")
+main:4:0: error: Unsupported operand types for >> ("A" and "A")
+main:5:0: error: Unsupported operand types for // ("A" and "A")
 
 [case testInplaceOperatorMethods]
 import typing
@@ -327,7 +327,7 @@ import typing
 assert None + None # Fail
 assert None
 [out]
-main:2: error: Unsupported left operand type for + (None)
+main:2:12: error: Unsupported left operand type for + (None)
 
 
 -- Exception handling
@@ -346,7 +346,7 @@ class A: pass
 class MyError(BaseException): pass
 [builtins fixtures/exception.pyi]
 [out]
-main:5: error: Exception must be derived from BaseException
+main:5:0: error: Exception must be derived from BaseException
 
 [case testRaiseClassobject]
 import typing
@@ -392,8 +392,8 @@ finally:
     c = object() # type: A # Fail
 class A: pass
 [out]
-main:3: error: Incompatible types in assignment (expression has type "object", variable has type "A")
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:3:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:5:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
 
 [case testSimpleTryExcept]
 
@@ -407,7 +407,7 @@ class A: pass
 class B: pass
 [builtins fixtures/exception.pyi]
 [out]
-main:7: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
+main:7:2: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
 
 [case testTypeErrorInBlock]
 
@@ -418,8 +418,8 @@ while object:
 class A: pass
 class B: pass
 [out]
-main:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
-main:5: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:4:2: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:5:2: error: Incompatible types in assignment (expression has type "B", variable has type "A")
 
 [case testTypeErrorInvolvingBaseException]
 
@@ -432,10 +432,10 @@ x = BaseException()
 class A: pass
 [builtins fixtures/exception.pyi]
 [out]
-main:3: error: Incompatible types in assignment (expression has type "BaseException", variable has type "A")
-main:4: error: Incompatible types in assignment (expression has type "object", variable has type "A")
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
-main:6: error: Incompatible types in assignment (expression has type "A", variable has type "BaseException")
+main:3:0: error: Incompatible types in assignment (expression has type "BaseException", variable has type "A")
+main:4:0: error: Incompatible types in assignment (expression has type "object", variable has type "A")
+main:5:0: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
+main:6:0: error: Incompatible types in assignment (expression has type "A", variable has type "BaseException")
 
 [case testSimpleTryExcept2]
 import typing
@@ -446,7 +446,7 @@ except BaseException as e:
   e = BaseException()
 [builtins fixtures/exception.pyi]
 [out]
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
+main:5:2: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
 
 [case testBaseClassAsExceptionTypeInExcept]
 import typing
@@ -458,7 +458,7 @@ except Err as e:
 class Err(BaseException): pass
 [builtins fixtures/exception.pyi]
 [out]
-main:5: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
+main:5:2: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
 
 [case testMultipleExceptHandlers]
 import typing
@@ -472,7 +472,7 @@ except Err as f:
 class Err(BaseException): pass
 [builtins fixtures/exception.pyi]
 [out]
-main:7: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
+main:7:4: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
 
 [case testTryExceptStatement]
 import typing
@@ -489,9 +489,9 @@ class B: pass
 class Err(BaseException): pass
 [builtins fixtures/exception.pyi]
 [out]
-main:3: error: Incompatible types in assignment (expression has type "B", variable has type "A")
-main:5: error: Incompatible types in assignment (expression has type "A", variable has type "BaseException")
-main:8: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
+main:3:4: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:5:4: error: Incompatible types in assignment (expression has type "A", variable has type "BaseException")
+main:8:4: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
 
 [case testTryExceptWithinFunction]
 import typing
@@ -507,8 +507,8 @@ class Err(BaseException): pass
 [builtins fixtures/exception.pyi]
 [out]
 main: note: In function "f":
-main:5: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
-main:8: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
+main:5:4: error: Incompatible types in assignment (expression has type "object", variable has type "BaseException")
+main:8:4: error: Incompatible types in assignment (expression has type "BaseException", variable has type "Err")
 
 [case testTryExceptFlow]
 def f() -> None:
@@ -1181,7 +1181,7 @@ class A(): pass
 class B(): pass
 [out]
 main: note: In function "f":
-main:5: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:5:4: error: Incompatible types in assignment (expression has type "B", variable has type "A")
 
 [case testTypeOfNonlocalUsed]
 import typing
@@ -1195,7 +1195,7 @@ class A(): pass
 class B(): pass
 [out]
 main: note: In function "g":
-main:6: error: Incompatible types in assignment (expression has type "B", variable has type "A")
+main:6:8: error: Incompatible types in assignment (expression has type "B", variable has type "A")
 
 [case testTypeOfOuterMostNonlocalUsed]
 import typing
@@ -1212,4 +1212,4 @@ class A(): pass
 class B(): pass
 [out]
 main: note: In function "h":
-main:8: error: Incompatible types in assignment (expression has type "A", variable has type "B")
+main:8:12: error: Incompatible types in assignment (expression has type "A", variable has type "B")
