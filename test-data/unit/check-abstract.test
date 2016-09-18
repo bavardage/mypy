@@ -15,10 +15,10 @@ a = None # type: A
 b = None # type: B
 c = None # type: C
 
-j = c  # E: Incompatible types in assignment (expression has type "C", variable has type "J")
-a = i  # E: Incompatible types in assignment (expression has type "I", variable has type "A")
-a = j  # E: Incompatible types in assignment (expression has type "J", variable has type "A")
-b = i  # E: Incompatible types in assignment (expression has type "I", variable has type "B")
+j = c  # E:0: Incompatible types in assignment (expression has type "C", variable has type "J")
+a = i  # E:0: Incompatible types in assignment (expression has type "I", variable has type "A")
+a = j  # E:0: Incompatible types in assignment (expression has type "J", variable has type "A")
+b = i  # E:0: Incompatible types in assignment (expression has type "I", variable has type "B")
 
 i = a
 i = b
