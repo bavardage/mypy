@@ -41,7 +41,7 @@ main:2:0: error: Function is missing a type annotation
 # flags: --disallow-subclassing-any
 from typing import Any
 FakeClass = None  # type: Any
-class Foo(FakeClass): pass  # E: Class cannot subclass 'FakeClass' (has type 'Any')
+class Foo(FakeClass): pass  # E:10: Class cannot subclass 'FakeClass' (has type 'Any')
 [out]
 
 [case testSubclassingAnyMultipleBaseClasses]
@@ -49,7 +49,7 @@ class Foo(FakeClass): pass  # E: Class cannot subclass 'FakeClass' (has type 'An
 from typing import Any
 FakeClass = None  # type: Any
 class ActualClass: pass
-class Foo(ActualClass, FakeClass): pass  # E: Class cannot subclass 'FakeClass' (has type 'Any')
+class Foo(ActualClass, FakeClass): pass  # E:23: Class cannot subclass 'FakeClass' (has type 'Any')
 [out]
 
 [case testSubclassingAnySilentImports]
