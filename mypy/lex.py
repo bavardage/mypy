@@ -274,10 +274,10 @@ def escape_repl(m: Match[str], prefix: str) -> str:
 class Lexer:
     """Lexical analyzer."""
 
-    i = 0      # Current string index (into s)
-    s = ''     # The string being analyzed
-    line = 0   # Current line number
-    column = 0 # Current column number
+    i = 0       # Current string index (into s)
+    s = ''      # The string being analyzed
+    line = 0    # Current line number
+    column = 0  # Current column number
     pre_whitespace = ''     # Whitespace and comments before the next token
     enc = ''                # Encoding
 

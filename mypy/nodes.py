@@ -126,7 +126,7 @@ class Node(Context):
 
     def get_column(self) -> int:
         # TODO this should be just 'column'
-        return self.line
+        return self.column
 
     def accept(self, visitor: NodeVisitor[T]) -> T:
         raise RuntimeError('Not implemented')

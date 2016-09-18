@@ -1761,7 +1761,9 @@ class Parser:
                 self.expect(':')
                 if self.current_str() not in (']', ','):
                     stride = self.parse_expression(precedence[','])
-            item = SliceExpr(index, end_index, stride).set_line(colon.line).set_column(colon.column)
+            item = SliceExpr(index, end_index, stride)\
+                .set_line(colon.line)\
+                .set_column(colon.column)
         return item
 
     def parse_bin_op_expr(self, left: Node, prec: int) -> OpExpr:
