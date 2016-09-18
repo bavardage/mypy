@@ -969,7 +969,7 @@ main: note: In function "f":
 
 [case testYieldFromNotAppliedToNothing]
 def h():
-    yield from  # E:51: Parse error before end of line
+    yield from  # E:54: Parse error before end of line
 [out]
 main: note: In function "h":
 

@@ -1,6 +1,6 @@
 [case testFastParseSyntaxError]
 # flags: --fast-parser
-1 +  # E:25: invalid syntax
+1 +  # E:28: invalid syntax
 
 [case testFastParseTypeCommentSyntaxError]
 # flags: --fast-parser

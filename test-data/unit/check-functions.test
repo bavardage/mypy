@@ -1122,7 +1122,7 @@ if x:
 
 [case testConditionalRedefinitionOfAnUnconditionalFunctionDefinition1]
 from typing import Any
-def f(x: int) -> None: pass # N: "f" defined here
+def f(x: int) -> None: pass # N:0: "f" defined here
 x = None # type: Any
 if x:
     def f(y: int) -> None: pass # E:4: All conditional function variants must have identical signatures

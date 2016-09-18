@@ -268,7 +268,7 @@ class Errors:
                                                                      str, str]]:
         """Translate the messages into a sequence of tuples.
 
-        Each tuple is of form (path, line, message.  The rendered
+        Each tuple is of form (path, line, col, message.  The rendered
         sequence includes information about error contexts. The path
         item may be None. If the line item is negative, the line
         number is not defined for the tuple.
@@ -355,8 +355,8 @@ class Errors:
                 i += 1
             i += 1
 
-            # Sort the errors specific to a file according to line number.
-            a = sorted(errors[i0:i], key=lambda x: x.line)
+            # Sort the errors specific to a file according to line number and column.
+            a = sorted(errors[i0:i], key=lambda x: (x.line, x.column))
             result.extend(a)
         return result
 

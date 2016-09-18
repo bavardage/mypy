@@ -83,7 +83,7 @@ def g(): f(0, a=1)
 
 [case testInvalidKeywordArgument]
 import typing
-def f(a: 'A') -> None: pass # N: "f" defined here
+def f(a: 'A') -> None: pass # N:0: "f" defined here
 f(b=object()) # E:1: Unexpected keyword argument "b" for "f"
 class A: pass
 
@@ -251,7 +251,7 @@ class A: pass
 
 [case testKeywordArgumentAndCommentSignature]
 import typing
-def f(x): # type: (int) -> str # N: "f" defined here
+def f(x): # type: (int) -> str # N:0: "f" defined here
     pass
 f(x='') # E:1: Argument 1 to "f" has incompatible type "str"; expected "int"
 f(x=0)
