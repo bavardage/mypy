@@ -905,7 +905,7 @@ A = Tuple[int, str]
 u = 1, 'x' # type: A
 u = 1
 [out]
-_program.py:4:8: error: Incompatible types in assignment (expression has type "int", variable has type "Tuple[int, str]")
+_program.py:4:0: error: Incompatible types in assignment (expression has type "int", variable has type "Tuple[int, str]")
 
 [case testCallableTypeAlias]
 from typing import Callable
