@@ -352,7 +352,9 @@ def expand_errors(input: List[str], output: List[str], fnam: str) -> None:
             if col is None:
                 output.append('{}:{}: {}: {}'.format(fnam, i + 1, severity, m.group('message')))
             else:
-                output.append('{}:{}:{}: {}: {}'.format(fnam, i + 1, col, severity, m.group('message')))
+                output.append('{}:{}:{}: {}: {}'.format(
+                    fnam, i + 1, col, severity, m.group('message')))
+
 
 def fix_win_path(line: str) -> str:
     r"""Changes paths to Windows paths in error messages.
